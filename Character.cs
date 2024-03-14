@@ -1,6 +1,7 @@
 public class Character
 {
-    public Character(string name, string vocation, int level, int currentVigor, int currVigorMax, int currArmor, int currRes, int currSP, int currSPMax, int currentTech, int damage, List<Skill> skills, List<StatusEffect> statusEffects, List<Item> items)
+    public Character(string name, string vocation, int level, int currentVigor, int currVigorMax, int currArmor, int currRes, int currSP, int currSPMax, int currentTech, int dealtDamage, int receiveDamage,
+    List<Skill> passSkills,List<Skill> actSkill , List<StatusEffect> statusEffects, List<Item> items)
     {
         Name = name;
         Vocation = vocation;
@@ -12,8 +13,10 @@ public class Character
         CurrSP = currSP;
         CurrSPMax = currSPMax;
         CurrentTech = currentTech;
-        Damage = damage;
-        Skills = skills;
+        DealtDamage = dealtDamage;
+        RecieveDamage = receiveDamage;
+        PassSkills = passSkills;
+        ActSkills = actSkill;
         StatusEffects = statusEffects;
         Items = items;
     }
@@ -28,15 +31,16 @@ public class Character
     public int CurrSP { get; set; }
     public int CurrSPMax { get; set; }
     public int CurrentTech { get; set; }
-    public int Damage { get; set; }
-    public List<Skill> Skills { get; set; }
+    public int DealtDamage { get; set; }
+    public int RecieveDamage { get; set; } 
+    public List<Skill> PassSkills { get; set; }
+    public List<Skill> ActSkills { get; set; }
     public List<StatusEffect> StatusEffects { get; set; }
     public List<Item> Items { get; set; }
     
     public virtual void DisplayStats()
     {
         Console.WriteLine("Name: " + Name);
-        Console.WriteLine("Vocation: " + Vocation);
         Console.WriteLine("Current Vigor: " + CurrentVigor);
         Console.WriteLine("Max Vigor: " + CurrVigorMax);
         Console.WriteLine("Current Armor: " + CurrArmor);
@@ -44,65 +48,111 @@ public class Character
         Console.WriteLine("Current SP: " + CurrSP);
         Console.WriteLine("Max SP: " + CurrSPMax);
         Console.WriteLine("Current Tech: " + CurrentTech);
-        Console.WriteLine("Skills: " + string.Join(", ", Skills));
     }
     
-    public void addSkill(Skill skill)
+    public void addPassSkill(Skill skill)
     {
-        Skills.Add(skill);
+        PassSkills.Add(skill);
+    }
+        public void addActSkill(Skill skill)
+    {
+        ActSkills.Add(skill);
+    }
+
+    public void removePassSkill(Skill skill)
+    {
+        PassSkills.Remove(skill);
+    }
+    public void removeActSkill(Skill skill)
+    {
+        ActSkills.Remove(skill);
+    }
+    public void UsePassSkill(string skillName, Character self)
+    {
+        Skill skill = PassSkills.Find(s => s.Name == skillName);
+        if (skill != null)
+        {
+            skill.Execute(this, self);
+        }
+        else
+        {
+            Console.WriteLine("Skill not found.");
+        }
     }
     public void UseSkill(string skillName, Character target)
     {
-        Skill skill = Skills.Find(s => s.Name == skillName);
+        List<string> selfStrikeEffects = new List<string> { "Blind", "Honed", "Empowered" };
+        List<string> targetStrikeEffects = new List<string> { "Brittle", "Barrier", "Bolstered" };
+        Skill skill = ActSkills.Find(s => s.Name == skillName);
         if (skill != null)
         {
             skill.Execute(this, target);
-            Damage = skill.DealDamage(this, target);
+            DealtDamage = skill.DealDamage(this, target);
+
+            // set max damage limit
+            int fatal = DealtDamage * 4;
             CurrSP -= skill.Cost;
+
             if (skillName == "Strike")
             {
-                List<string> strikeEffects = new List<string> { "Blind" };
-                foreach (string effectName in strikeEffects)
-                {
-                    // Check if the target has the effect
-                    if (target.StatusEffects.Any(e => e.Name == effectName))
-                    {
-                        StatusEffect effect = target.StatusEffects.Find(e => e.Name == effectName);
-                        effect.Apply(target);
-                    }
-
+                
+                foreach (string selfEffect in selfStrikeEffects)
                     // Check if the user has the effect
-                    if (StatusEffects.Any(e => e.Name == effectName))
+                    if (StatusEffects.Any(e => e.Name == selfEffect))
                     {
-                        StatusEffect effect = StatusEffects.Find(e => e.Name == effectName);
+                        StatusEffect effect = StatusEffects.Find(e => e.Name == selfEffect);
                         effect.Apply(this);
                     }
+                    target.RecieveDamage = DealtDamage;
                 }
 
-                target.CurrentVigor -= Damage;
+                foreach (string targetEffect in targetStrikeEffects)
+                {
+                    // Check if the target has the effect
+                    if (target.StatusEffects.Any(e => e.Name == targetEffect))
+                    {
+                        StatusEffect effect = target.StatusEffects.Find(e => e.Name == targetEffect);
+                        effect.Apply(target);
+                    }
+                }      
+
+                // cap max damage
+                if (target.RecieveDamage >= fatal)
+                {
+                    target.RecieveDamage = fatal;
+                }
+                // set min damage limit
+                if (target.RecieveDamage < 0)
+                {
+                    target.RecieveDamage = 1;
+                }
+                target.CurrentVigor -= target.RecieveDamage;
+                
+                // reset damage calculations
+                target.RecieveDamage = 0;
+                DealtDamage = 0;
 
                 // Remove Strike-based effects after the strike is used
-                foreach (string effectName in strikeEffects)
+                foreach (string selfEffect in selfStrikeEffects)
                 {
                     // End effect on the character
-                    StatusEffect effect = StatusEffects.Find(e => e.Name == effectName);
+                    StatusEffect effect = StatusEffects.Find(e => e.Name == selfEffect);
                     if (effect != null)
                     {
                         effect.End(this);
                         StatusEffects.Remove(effect);
                     }
-
+                }
+                foreach (string effectName in targetStrikeEffects)
+                {
                     // End effect on the target
-                    StatusEffect targetEffect = target.StatusEffects.Find(e => e.Name == effectName);
-                    if (targetEffect != null)
+                    StatusEffect effect = target.StatusEffects.Find(e => e.Name == effectName);
+                    if (effect != null)
                     {
-                        targetEffect.End(target);
-                        target.StatusEffects.Remove(targetEffect);
+                        effect.End(target);
+                        target.StatusEffects.Remove(effect);
                     }
                 }
-            }
-        
-            
         }
         else
             {

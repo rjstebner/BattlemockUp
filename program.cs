@@ -6,27 +6,45 @@ class program
     static void Main()
     {
         Character Peso = new PlayerCharacter(
-            "Bob", "Rapscallion", 1, 100, 100, 50, 50, 100, 100, 100, 0, new List<Skill> {new Strike(), new Blinding() }, new List<StatusEffect> { }, new List<Item> { }, 
-            0, 100, 100, 50, 50, 100, 100, 100, 100, 100, 100);
+            "Peso", "Rapscallion", 1, 
+        // vigor, vigorMax, armor, res, sp, spMax, tech, dealtDamage, receiveDamage
+            8, 8, 10, 8, 3, 3, 3, 0, 0, 
+            new List<Skill>{ new SurpriseAttack() }, new List<Skill> {new Strike(), new PocketSand()}, new List<StatusEffect> { }, new List<Item> { }, 
+            0, 
+        // vigor, vigorMax, armor, armorMax, res, resMax, sp, spMax, tech, techMax
+            8, 12, 10, 14, 8, 10, 3, 5, 3, 7);
         Character Charlie = new PlayerCharacter(
-            "Bob", "Archer", 1, 100, 100, 50, 50, 100, 100, 100, 0, new List<Skill> {new Strike()}, new List<StatusEffect> { }, new List<Item> { }, 
-            0, 100, 100, 50, 50, 100, 100, 100, 100, 100, 100);
+            "Charlie", "Archer", 1, 
+            7, 7, 7, 5, 3, 3, 5, 0, 0, 
+            new List<Skill>{new Focused()}, new List<Skill> {new Strike(), new MarkPrey()}, new List<StatusEffect> { }, new List<Item> { }, 
+            0, 
+            7, 11, 7, 10, 5, 8, 3, 7, 5, 8);
         Character Richie = new PlayerCharacter(
-            "Bob", "Healer", 1, 100, 100, 50, 50, 100, 100, 100, 0, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { }, 
-            0, 100, 100, 50, 50, 100, 100, 100, 100, 100, 100);
+            "Richie", "Healer", 1, 
+            6, 6, 10, 12, 3, 3, 5, 0, 0, 
+            new List<Skill>{ new BeconOfHealth()}, new List<Skill> {new Strike(), new Heal()}, new List<StatusEffect> { }, new List<Item> { }, 
+            0, 
+            6, 8, 10, 15, 12, 16, 3, 7, 5, 10);
         Character Beary = new PlayerCharacter(
-            "Bob", "Warrior", 1, 100, 100, 50, 50, 100, 100, 100, 0, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { }, 
-            0, 100, 100, 50, 50, 100, 100, 100, 100, 100, 100);
-        Character Piggy = new PlayerCharacter(
-            "Bob", "Mage", 1, 100, 100, 50, 50, 100, 100, 100, 0, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { }, 
-            0, 100, 100, 50, 50, 100, 100, 100, 100, 100, 100);
+            "Beary", "Warrior", 1, 
+            10, 10, 12, 4, 4, 3, 3, 0, 0, 
+            new List<Skill>{new SheildBlock() }, new List<Skill> {new Strike(), new ForTheKing() }, new List<StatusEffect> { }, new List<Item> { }, 
+            0, 
+            10, 15, 12, 15, 4, 8, 3, 8, 3, 3);
+            Character Piggy = new PlayerCharacter(
+            "Piggy", "Mage", 1, 
+            6, 6, 8, 12, 5, 5, 8, 0, 0, 
+            new List<Skill>{new LivingOnTheEdge()}, new List<Skill> {new Strike(), new Energybolt() }, new List<StatusEffect> { }, new List<Item> { }, 
+            0, 
+            6, 10, 8, 12, 12, 16, 5, 9, 8, 13);
         
         
-        Character enemy = new Character(
-            "Goblin", "Monster", 1, 50, 50, 25, 25, 50, 50, 50, 0, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { }); ;
+        Character goblin = new Character(
+            "Goblin", "Monster", 1, 6, 6, 6, 4, 0, 0, 0, 0, 0, new List<Skill>{}, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { });
+        Character orc = new Character(
+            "Orc", "Monster", 1, 14, 14, 10, 4, 1, 1, 1, 0, 0, new List<Skill>{}, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { });
+        Character shaman = new Character(
+            "Shaman", "Monster", 1, 10, 10, 8, 12, 5, 5, 8, 0, 0, new List<Skill>{}, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { });
         
-        Strike strike = new Strike();
-        Blinding blinding = new Blinding();
-
     }
 }

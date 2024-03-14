@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Randy_Learns_Code\\CSE310\\BattlerMockup\\project.csproj": {}
+    "d:\\Randy_Learns_Code\\CSE310\\BattleMockup\\BattlemockUp\\project.csproj": {}
   },
   "projects": {
-    "D:\\Randy_Learns_Code\\CSE310\\BattlerMockup\\project.csproj": {
+    "d:\\Randy_Learns_Code\\CSE310\\BattleMockup\\BattlemockUp\\project.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Randy_Learns_Code\\CSE310\\BattlerMockup\\project.csproj",
+        "projectUniqueName": "d:\\Randy_Learns_Code\\CSE310\\BattleMockup\\BattlemockUp\\project.csproj",
         "projectName": "project",
-        "projectPath": "D:\\Randy_Learns_Code\\CSE310\\BattlerMockup\\project.csproj",
+        "projectPath": "d:\\Randy_Learns_Code\\CSE310\\BattleMockup\\BattlemockUp\\project.csproj",
         "packagesPath": "C:\\Users\\rjste\\.nuget\\packages\\",
-        "outputPath": "D:\\Randy_Learns_Code\\CSE310\\BattlerMockup\\obj\\",
+        "outputPath": "d:\\Randy_Learns_Code\\CSE310\\BattleMockup\\BattlemockUp\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "D:\\Visual Studio\\Shared\\NuGetPackages"
