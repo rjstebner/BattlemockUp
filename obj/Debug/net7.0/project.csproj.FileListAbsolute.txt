@@ -1,0 +1,5 @@
+D:\Game Making\C#\obj\Debug\net7.0\project.csproj.AssemblyReference.cache
+D:\Game Making\C#\obj\Debug\net7.0\project.GeneratedMSBuildEditorConfig.editorconfig
+D:\Game Making\C#\obj\Debug\net7.0\project.AssemblyInfoInputs.cache
+D:\Game Making\C#\obj\Debug\net7.0\project.AssemblyInfo.cs
+D:\Game Making\C#\obj\Debug\net7.0\project.csproj.CoreCompileInputs.cache

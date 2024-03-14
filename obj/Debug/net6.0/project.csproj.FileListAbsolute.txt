@@ -1,0 +1,29 @@
+D:\Game Making\C#\obj\Debug\net6.0\project.csproj.AssemblyReference.cache
+D:\Game Making\C#\obj\Debug\net6.0\project.GeneratedMSBuildEditorConfig.editorconfig
+D:\Game Making\C#\obj\Debug\net6.0\project.AssemblyInfoInputs.cache
+D:\Game Making\C#\obj\Debug\net6.0\project.AssemblyInfo.cs
+D:\Game Making\C#\obj\Debug\net6.0\project.csproj.CoreCompileInputs.cache
+D:\Game Making\C#\bin\Debug\net6.0\project.exe
+D:\Game Making\C#\bin\Debug\net6.0\project.deps.json
+D:\Game Making\C#\bin\Debug\net6.0\project.runtimeconfig.json
+D:\Game Making\C#\bin\Debug\net6.0\project.dll
+D:\Game Making\C#\bin\Debug\net6.0\project.pdb
+D:\Game Making\C#\obj\Debug\net6.0\project.dll
+D:\Game Making\C#\obj\Debug\net6.0\refint\project.dll
+D:\Game Making\C#\obj\Debug\net6.0\project.pdb
+D:\Game Making\C#\obj\Debug\net6.0\project.genruntimeconfig.cache
+D:\Game Making\C#\obj\Debug\net6.0\ref\project.dll
+d:\Randy_Learns_Code\CSE310\BattlerMockup\bin\Debug\net6.0\project.exe
+d:\Randy_Learns_Code\CSE310\BattlerMockup\bin\Debug\net6.0\project.deps.json
+d:\Randy_Learns_Code\CSE310\BattlerMockup\bin\Debug\net6.0\project.runtimeconfig.json
+d:\Randy_Learns_Code\CSE310\BattlerMockup\bin\Debug\net6.0\project.dll
+d:\Randy_Learns_Code\CSE310\BattlerMockup\bin\Debug\net6.0\project.pdb
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.GeneratedMSBuildEditorConfig.editorconfig
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.AssemblyInfoInputs.cache
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.AssemblyInfo.cs
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.csproj.CoreCompileInputs.cache
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.dll
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\refint\project.dll
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.pdb
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\project.genruntimeconfig.cache
+d:\Randy_Learns_Code\CSE310\BattlerMockup\obj\Debug\net6.0\ref\project.dll
