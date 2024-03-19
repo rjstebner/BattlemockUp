@@ -128,6 +128,7 @@ public class Strike : Skill
     {
     
         int damage = (user.DealtDamage + user.CurrentVigor) - target.CurrArmor;
+        Console.WriteLine(user.Name + "Stikes " + target.Name + " for " + damage + " damage.");
         return damage;
     
     }

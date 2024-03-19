@@ -1,3 +1,5 @@
+using System.ComponentModel.Design;
+
 public class Character
 {
     public Character(string name, string vocation, int level, int currentVigor, int currVigorMax, int currArmor, int currRes, int currSP, int currSPMax, int currentTech, int dealtDamage, int receiveDamage,
@@ -40,14 +42,37 @@ public class Character
     
     public virtual void DisplayStats()
     {
-        Console.WriteLine("Name: " + Name);
-        Console.WriteLine("Current Vigor: " + CurrentVigor);
-        Console.WriteLine("Max Vigor: " + CurrVigorMax);
-        Console.WriteLine("Current Armor: " + CurrArmor);
-        Console.WriteLine("Current Resistance: " + CurrRes);
-        Console.WriteLine("Current SP: " + CurrSP);
-        Console.WriteLine("Max SP: " + CurrSPMax);
-        Console.WriteLine("Current Tech: " + CurrentTech);
+        Console.WriteLine(Name);
+        Console.WriteLine("HP: " + string.Concat(Enumerable.Repeat("O", CurrentVigor)) + string.Concat(Enumerable.Repeat("X", CurrVigorMax - CurrentVigor)));
+        if (CurrArmor > 0)
+        {
+            Console.WriteLine("Armor: " + CurrArmor);
+        }
+        if (CurrRes > 0)
+        {
+            Console.WriteLine("Resistance: " + CurrRes);
+        }
+        if (CurrentTech > 0)
+        {
+            Console.WriteLine("Tech: " + CurrentTech);
+        }
+        if (StatusEffects.Count > 0)
+        {
+            Console.WriteLine("Status Effects: ");
+            foreach (var effect in StatusEffects)
+            {
+                Console.Write(effect.Name + " ");
+            }
+        }
+    }
+    public void DisplaySkills()
+    {
+
+        Console.WriteLine("Active Skills: ");
+        foreach (var skill in ActSkills)
+        {
+            Console.WriteLine(skill.Name);
+        }
     }
     
     public void addPassSkill(Skill skill)
