@@ -84,7 +84,7 @@ public class Combat
 
     public Character SelectPlayer()
     {
-        Console.WriteLine("Select a character to attack: ");
+        Console.WriteLine("Select a character to Control: ");
         string input = Console.ReadLine();
         
         if (!string.IsNullOrEmpty(input))
