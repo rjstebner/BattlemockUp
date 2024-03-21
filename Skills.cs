@@ -6,6 +6,7 @@ public class Skill
     public string? Name { get; set; }
 
     public string? Description { get; set; }
+    public string? Type { get; set; }
     public int Cost { get; set; }
 
 
@@ -31,10 +32,24 @@ public class SheildBlock : Skill
 
     public override void Execute(Character user, Character target)
     {
-        user.AddStatusEffect(new Bolstered());
+        bool isBolstered = false;
+        foreach (var effect in user.StatusEffects)
+        {
+            if (effect is Bolstered)
+            {
+                isBolstered = true;
+                break;
+            }
+        }
+
+        if (!isBolstered)
+        {
+            user.AddStatusEffect(new Bolstered());
+        }
+        Console.WriteLine(user.Name + " is now Bolstered.");
+
     }
 }
-
 public class Focused : Skill
 {
     public Focused()
@@ -94,6 +109,7 @@ public class BeconOfHealth : Skill
     public override void Execute(Character user, Character target)
     {
         user.CurrentVigor += user.CurrVigorMax / 10;
+        Console.WriteLine(user.Name + " has healed for " + user.CurrVigorMax / 10 + " health.");
     }
 }
 
@@ -110,6 +126,7 @@ public class LivingOnTheEdge : Skill
         if (user.CurrentVigor < user.CurrVigorMax / 4)
         {
             user.AddStatusEffect(new Empowered()); 
+            Console.WriteLine(user.Name + " is now Empowered.");
         }
     }
 }
@@ -121,6 +138,7 @@ public class Strike : Skill
     {
         Name = "Strike";
         Description = "A basic attack that deals damage to enemies.";
+        Type = "Physical";
         Cost = 0;
     }
 
@@ -128,7 +146,6 @@ public class Strike : Skill
     {
     
         int damage = (user.DealtDamage + user.CurrentVigor) - target.CurrArmor;
-        Console.WriteLine(user.Name + "Stikes " + target.Name + " for " + damage + " damage.");
         return damage;
     
     }
@@ -140,6 +157,7 @@ public class StealthStrike : Skill
     {
         Name = "Stealth Strike";
         Description = "A basic attack that pierces all armor.";
+        Type = "Physical";
         Cost = 0;
     }
 
@@ -162,6 +180,7 @@ public class ForTheKing : Skill
     public override void Execute(Character user, Character target)
     {
         target.AddStatusEffect(new Barrier());
+        Console.WriteLine(target.Name + " is now Barriered.");
     }
 }
 
@@ -177,6 +196,7 @@ public class MarkPrey : Skill
     public override void Execute(Character user, Character target)
     {
         target.AddStatusEffect(new Brittle());
+        Console.WriteLine(target.Name + " is now Brittle.");
     }
 }
 public class PocketSand : Skill
@@ -191,6 +211,7 @@ public class PocketSand : Skill
     public override void Execute(Character user, Character target)
     {
         target.AddStatusEffect(new Blind());
+        Console.WriteLine(target.Name + " is now Blinded.");
     }
 }
 
@@ -206,6 +227,7 @@ public class Heal : Skill
     public override void Execute(Character user, Character target)
     {
         target.CurrentVigor += user.CurrentTech;
+        Console.WriteLine(target.Name + " has healed for " + user.CurrentTech + " health.");
     }
 }   
 public class Energybolt : Skill
@@ -214,6 +236,7 @@ public class Energybolt : Skill
     {
         Name = "Energybolt";
         Description = "Deal damage to an enemy.";
+        Type = "Magical";
         Cost = 1;
     }
 

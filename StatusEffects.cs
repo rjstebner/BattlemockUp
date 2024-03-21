@@ -45,7 +45,6 @@ public class Brittle : StatusEffect
     public override void Apply(Character character)
     {
         character.RecieveDamage *= 2; // Brittle characters have less armor
-        Console.WriteLine(character.Name + " is now Brittle.");
     }
 
     public override void End(Character character)

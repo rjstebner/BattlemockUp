@@ -1,3 +1,7 @@
+using System.Data.Common;
+using System.Runtime.InteropServices;
+using System.Runtime.Intrinsics.X86;
+
 public class Combat
 {
     public List<Character> Players { get; private set; }
@@ -11,49 +15,133 @@ public class Combat
 
     public void Start()
     {
-        int playerIndex = 0;
-        int enemyIndex = 0;
         int turnCount = 0;
 
         while (Players.Any(p => p.CurrentVigor > 0) && Enemies.Any(e => e.CurrentVigor > 0))
         {
             turnCount++;
+
+
             Console.WriteLine($"Turn {turnCount}");
-            DisplayCombatants();
-            List<Character> playerHasTurn = new List<Character>(Players);
-            List<Character> enemyHasTurn = new List<Character>(Enemies);
+                        
             TriggerPassives();
-            while (playerHasTurn.Count != 0 && enemyHasTurn.Count !=0)
+            
+            List<Character> Combatants = new List<Character>(Players.Concat(Enemies));
+            foreach (var combatant in Combatants)
             {
-                if (playerHasTurn.Any(p => p.CurrentVigor > 0))
+                combatant.HasTurn = true;
+            }
+
+            LineBreak();   
+
+            DisplayCombatants(Players);
+            
+            LineBreak();
+
+            DisplayCombatants(Enemies);
+
+            LineBreak();
+
+            Console.Write("Press enter to continue ");
+            Console.ReadLine();
+            try
                 {
-                    // Player's turn logic goes here
-                    Character PC = SelectPlayer();
-                    PC.DisplaySkills();
-                    string skill = SelectSkill();
-                    foreach (var enemy in Enemies)
-                    {
-                        enemy.DisplayStats();
-                    }
-                    Character EC = SelectEnemy();
-                    PC.UseSkill(skill, EC);
-
-                    playerHasTurn.Remove(PC);
+                    Console.Clear();
                 }
-
-
-                // Enemy's turn
-                if (enemyHasTurn.Any(e => e.CurrentVigor > 0))
+            catch (System.IO.IOException)
                 {
-                    // Enemy's turn logic goes here
-                    EnenyTurn(enemyHasTurn[0]);
+                    // Handle the exception here
+                }
 
-                }
-                enemyHasTurn.Remove(enemyHasTurn[0]);
-                }
+
+            while (Players.Any(p => p.HasTurn == true) || Enemies.Any(e => e.HasTurn == true))
+            {
+            Console.Clear();
+            
+            if (Players.Any(p => p.HasTurn == true))
+            {
+                TurnLoop(Players, Enemies);
+
+            }
+  
+            }        
         }
+        End();
     }
 
+    public void TurnLoop(List<Character> players, List<Character> enemies)
+    {
+            
+        DisplayCombatants(players);
+        LineBreak();
+    
+
+        Character pc = SelectPlayer(players);
+        if (pc.HasTurn == false)
+        {
+            Console.WriteLine("This character has already had a turn");
+            TurnLoop(players, enemies);
+        }
+        else
+        {
+            Console.Clear();
+
+            pc.DisplaySkills();
+            string skill = SelectSkill();
+
+            Console.Clear();
+
+            DisplayCombatants(enemies);
+            Character target = SelectEnemy();
+            pc.UseSkill(skill, target);
+            if (enemies.Any(e => e.HasTurn == true))
+            {
+                EnenyTurn(enemies.First(e => e.HasTurn == true));
+                enemies.First(e => e.HasTurn == true).HasTurn = false;
+            }
+            pc.HasTurn = false;
+
+            Console.ReadLine();
+            players.RemoveAll(p => p.CurrentVigor <= 0);
+            enemies.RemoveAll(e => e.CurrentVigor <= 0);  
+
+            }
+            Console.Clear();   
+            DisplayCombatants(players);
+            LineBreak();
+            DisplayCombatants(enemies);
+            LineBreak();
+
+            foreach (var player in players)
+            {
+                if (player.RecieveDamage > 0)
+                {
+                    Console.WriteLine(player.Name + " took " + player.RecieveDamage + " damage");
+                    player.RecieveDamage = 0;
+                }
+                if (player.CurrentVigor <= 0)
+                {
+                    Console.WriteLine(player.Name + " has been defeated");
+                }
+
+            }
+            foreach (var enemy in enemies)
+            {
+                if (enemy.RecieveDamage > 0)
+                {
+                    Console.WriteLine(enemy.Name + " took " + enemy.RecieveDamage + " damage");
+                    enemy.RecieveDamage = 0;
+                }
+                if (enemy.CurrentVigor <= 0)
+                {
+                    Console.WriteLine(enemy.Name + " has been defeated");
+                }
+            }   
+            Console.ReadLine();
+            Console.Clear();
+
+
+    }
     public void TriggerPassives()
     {
         foreach (var character in Players.Concat(Enemies))
@@ -64,29 +152,88 @@ public class Combat
             }
         }
     }
-
-    public void DisplayCombatants()
+    public void DisplayCombatants(List<Character> Combatants)
     {
-        foreach (var character in Players)
+        int cursorspot = 31;
+        foreach (var player in Combatants)
         {
-            character.DisplayStats();
+            Console.Write("||| ");
+            Console.Write(player.Name + " | " + player.HasTurn );
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
         }
         Console.WriteLine();
+        cursorspot = 31;
+
+        foreach (var player in Combatants)
+        {
+            Console.Write("||| ");
+            Console.Write("HP: " + string.Concat(Enumerable.Repeat("O", player.CurrentVigor)) + string.Concat(Enumerable.Repeat("X", player.CurrVigorMax - player.CurrentVigor)));
+            Console.Write("   " + player.CurrentVigor + "/" + player.CurrVigorMax + " ");
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
+        }
         Console.WriteLine();
-        Console.WriteLine("==================================");
+        cursorspot = 31;
+        foreach (var player in Combatants)
+        {
+            Console.Write("||| ");
+            if (player.CurrArmor > 0)
+            {
+                Console.Write("Armor: " + player.CurrArmor + " ");
+            }
+            if (player.CurrRes > 0)
+            {
+                Console.Write("| Resistance: " + player.CurrRes);
+            }
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
+        }
+        Console.WriteLine();
+        cursorspot = 31;
+
+        foreach (var player in Combatants)
+        {
+            Console.Write("||| ");
+            Console.Write("SP: " + string.Concat(Enumerable.Repeat("O", player.CurrSP)) + string.Concat(Enumerable.Repeat("X", player.CurrSPMax - player.CurrSP)) + " ");
+            if (player.CurrentTech > 0)
+            {
+                Console.Write("| Tech: " + player.CurrentTech);
+            }
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
+        }
         Console.WriteLine();
 
-        foreach (var character in Enemies)
+        cursorspot = 31;
+
+        foreach (var player in Combatants)
         {
-            character.DisplayStats();
+            Console.Write("||| ");
+            Console.Write("Status Effects: ");
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
         }
+        Console.WriteLine();
+        cursorspot = 31;
+
+        foreach (var player in Combatants)
+        {
+            Console.Write("         ");
+            foreach (var effect in player.StatusEffects)
+            {
+                Console.Write(effect.Name + " ");
+            }
+            Console.SetCursorPosition(cursorspot, Console.CursorTop);
+            cursorspot += 31;
+        }
+        Console.WriteLine();
     }
-
-    public Character SelectPlayer()
+    public Character SelectPlayer(List<Character> Players)
     {
         Console.WriteLine("Select a character to Control: ");
         string input = Console.ReadLine();
-        
+
         if (!string.IsNullOrEmpty(input))
         {
             var selectedPlayer = Players.FirstOrDefault(p => p.Name == input);
@@ -95,11 +242,10 @@ public class Combat
                 return selectedPlayer;
             }
         }
-        
-        Console.WriteLine("Invalid input");
-        return SelectPlayer();
-    }
 
+        Console.WriteLine("Invalid input");
+        return SelectPlayer(Players);
+    }
     public Character SelectEnemy()
     {
         Console.WriteLine("Select an enemy to attack: ");
@@ -117,7 +263,6 @@ public class Combat
         Console.WriteLine("Invalid input");
         return SelectEnemy();
     }
-
     public string SelectSkill()
     {
         Console.WriteLine("Select a skill to use: ");
@@ -138,15 +283,15 @@ public class Combat
             // Mob logic attacks a random player, prio the first player in list
             Random random = new Random();
             int target = random.Next(0, 10);
-            if (target < 5)
+            if (target < 4)
             {
                 Enemy.UseSkill("Strike", Players[0]);
             }
-            if (target >= 5  &&  target <= 7)
+            else if (target >= 4 && target <= 6)
             {
                 Enemy.UseSkill("Strike", Players[1]);
             }
-            if (target == 8 & target == 9)
+            else if (target == 7 || target == 8)
             {
                 Enemy.UseSkill("Strike", Players[2]);
             }
@@ -198,9 +343,28 @@ public class Combat
             // Support logic goes here Heal Enemy With lowest health
         }
     }
-
+    public void LineBreak()
+    {
+        int number = 124;
+        Console.WriteLine();
+        while (number > 0)
+        {
+            Console.Write("=");
+            number -= 1;
+        }
+        Console.WriteLine();
+    }
     public void End()
     {
-        // Combat end logic goes here
+        if (Players.Any(p => p.CurrentVigor > 0))
+        {
+            Console.Clear();
+            Console.WriteLine("You win!");
+        }
+        else
+        {
+            Console.Clear();
+            Console.WriteLine("You lose!");
+        }
     }
 }

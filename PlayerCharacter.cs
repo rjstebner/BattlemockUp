@@ -1,10 +1,11 @@
 public class PlayerCharacter : Character
 {
-    public PlayerCharacter(string name, string vocation, int level ,int currentVigor, int currVigrorMax, int currArmor, int currRes, int currSP, int currSPMax, int currentTech, int dealtDamage, int receiveDamage,
+    public PlayerCharacter(string name, string vocation, bool hasTurn,int level ,int currentVigor, int currVigrorMax, int currArmor, int currRes, int currSP, int currSPMax, int currentTech, int dealtDamage, int receiveDamage,
     List <Skill> passSkills, List<Skill> actSkills, List<StatusEffect> statusEffects, List<Item> items,
     int experience, int vigor, int vigorMax, int armor, int armorMax, int res, int resMax, int sp, int spMax, int tech, int techMax) 
-        : base(name, vocation, level, currentVigor, currVigrorMax, currArmor, currRes, currSP, currSPMax, currentTech, dealtDamage, receiveDamage, passSkills, actSkills, statusEffects, items)
+        : base(name, vocation, hasTurn, level, currentVigor, currVigrorMax, currArmor, currRes, currSP, currSPMax, currentTech, dealtDamage, receiveDamage, passSkills, actSkills, statusEffects, items)
     {
+        HasTurn = true;
         Level = level;
         Experience = experience;
         Vigor = vigor;
