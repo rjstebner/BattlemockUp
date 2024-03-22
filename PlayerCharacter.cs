@@ -45,6 +45,15 @@ public class PlayerCharacter : Character
         Console.WriteLine("Name: " + Name);
         Console.WriteLine("HP: " + string.Concat(Enumerable.Repeat("O", CurrentVigor)) + string.Concat(Enumerable.Repeat("X", CurrVigorMax - CurrentVigor)));
         Console.WriteLine("Armor: " + CurrArmor + "\t" + "| Resistance: " + CurrRes);
-        Console.WriteLine("SP: " + string.Concat(Enumerable.Repeat("O", CurrSP)) + string.Concat(Enumerable.Repeat("X", CurrSPMax - CurrSP)) + " \t| Tech: " + CurrentTech);
+        Console.WriteLine("SP: " + string.Concat(Enumerable.Repeat("O", CurrSP)) + string.Concat(Enumerable.Repeat("X", CurrSPMax - CurrSP)) + " \t| Tech: " + CurrentTech);        
+        foreach (var skill in PassSkills)
+        {
+            Console.WriteLine("Passive Skill: " + skill.Name + " | " + skill.Description);
+        } 
+        foreach (var skill in ActSkills)
+        {
+            Console.WriteLine("Active Skill: " + skill.Name + " | " + skill.Description);
+        }
+  
     }
 }

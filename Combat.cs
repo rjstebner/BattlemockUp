@@ -17,15 +17,18 @@ public class Combat
     {
         int turnCount = 0;
 
+        // Combat loop
         while (Players.Any(p => p.CurrentVigor > 0) && Enemies.Any(e => e.CurrentVigor > 0))
         {
             turnCount++;
 
 
             Console.WriteLine($"Turn {turnCount}");
+            LineBreak();
                         
             TriggerPassives();
             
+            // Set all combatants to have a turn
             List<Character> Combatants = new List<Character>(Players.Concat(Enemies));
             foreach (var combatant in Combatants)
             {
@@ -54,15 +57,20 @@ public class Combat
                 }
 
 
+            // Turn loop
             while (Players.Any(p => p.HasTurn == true) || Enemies.Any(e => e.HasTurn == true))
             {
             Console.Clear();
-            
-            if (Players.Any(p => p.HasTurn == true))
-            {
-                TurnLoop(Players, Enemies);
+                       
+            TurnLoop(Players, Enemies);
 
-            }
+            // Remove dead combatants
+            Players.RemoveAll(p => p.CurrentVigor <= 0);
+            Enemies.RemoveAll(e => e.CurrentVigor <= 0);     
+            Console.ReadLine();
+            Console.Clear();
+
+            
   
             }        
         }
@@ -72,40 +80,62 @@ public class Combat
     public void TurnLoop(List<Character> players, List<Character> enemies)
     {
             
-        DisplayCombatants(players);
-        LineBreak();
-    
 
-        Character pc = SelectPlayer(players);
-        if (pc.HasTurn == false)
-        {
-            Console.WriteLine("This character has already had a turn");
-            TurnLoop(players, enemies);
-        }
-        else
-        {
-            Console.Clear();
+        // Check for player turn
 
-            pc.DisplaySkills();
-            string skill = SelectSkill();
-
-            Console.Clear();
-
-            DisplayCombatants(enemies);
-            Character target = SelectEnemy();
-            pc.UseSkill(skill, target);
-            if (enemies.Any(e => e.HasTurn == true))
+        if (players.Any(p => p.HasTurn == true))
             {
+            Console.Clear();
+            Console.WriteLine("Player Turn");
+            LineBreak();        
+            DisplayCombatants(players);
+            LineBreak();
+            Character pc = SelectPlayer(players);
+            if (pc.HasTurn == false)
+            {
+                Console.WriteLine("This character has already had a turn");
+                TurnLoop(players, enemies);
+            }
+            else
+            {
+                Console.Clear();
+                //player turn logic
+                pc.DisplaySkills();
+                string skill = SelectSkill();
+                while (!pc.ActSkills.Any(s => s.Name == skill))
+                {
+                    Console.WriteLine("Invalid skill");
+                    skill = SelectSkill();
+                }
+
+                Console.Clear();
+                if (skill == "heal" || skill == "For the King")
+                {
+                    DisplayCombatants(players);
+                    Character target = SelectPlayer(players);
+                    pc.UseSkill(skill, target);
+                }
+                else
+                {
+                    DisplayCombatants(enemies);
+                    Character target = SelectEnemy();
+                    pc.UseSkill(skill, target);
+                }
+
+
+                pc.HasTurn = false;
+
+                Console.ReadLine();
+
+
+            }
+            }
+        if (enemies.Any(e => e.HasTurn == true))
+        {
                 EnenyTurn(enemies.First(e => e.HasTurn == true));
                 enemies.First(e => e.HasTurn == true).HasTurn = false;
-            }
-            pc.HasTurn = false;
-
-            Console.ReadLine();
-            players.RemoveAll(p => p.CurrentVigor <= 0);
-            enemies.RemoveAll(e => e.CurrentVigor <= 0);  
-
-            }
+        }
+                
             Console.Clear();   
             DisplayCombatants(players);
             LineBreak();
@@ -136,9 +166,10 @@ public class Combat
                 {
                     Console.WriteLine(enemy.Name + " has been defeated");
                 }
-            }   
-            Console.ReadLine();
-            Console.Clear();
+            
+
+
+            }
 
 
     }
@@ -231,7 +262,7 @@ public class Combat
     }
     public Character SelectPlayer(List<Character> Players)
     {
-        Console.WriteLine("Select a character to Control: ");
+        Console.WriteLine("Select a character: ");
         string input = Console.ReadLine();
 
         if (!string.IsNullOrEmpty(input))

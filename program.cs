@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.PortableExecutable;
+using Microsoft.VisualBasic;
 
 class program
 {
@@ -51,7 +53,56 @@ class program
             "Shaman", "Monster", true, 1, 10, 10, 0, 12, 5, 5, 8, 0, 0, new List<Skill>{}, new List<Skill> {new Strike() }, new List<StatusEffect> { }, new List<Item> { });
         
 
-        Combat combat = new Combat(new List<Character> {Peso, Charlie, Piggy, Beary}, new List<Character> {goblin, orc, shaman});
+
+        // Display possible party members
+        List<Character> pp = new List<Character> {Peso, Charlie, Richie, Beary, Piggy};
+        foreach (var p in pp)
+        {
+            p.DisplayStats();
+            Console.WriteLine();
+        }
+
+
+        // choose party members
+        Console.WriteLine();
+        Console.WriteLine("Welcome to the game! You can choose up to 3 party members to join you in your adventure. Choose wisely! ");
+        Console.WriteLine("Enter the number of party members you'd like to join you: ");
+        Console.WriteLine();
+
+        Console.WriteLine("1. Peso");
+        Console.WriteLine("2. Charlie");
+        Console.WriteLine("3. Richie");
+        Console.WriteLine("4. Beary");
+        Console.WriteLine("5. Piggy");
+
+        List<Character> players = new List<Character> {};
+        for (int i = 0; i < 3; i++)
+        {
+            Console.WriteLine("Choose a party member: ");
+            int choice = Convert.ToInt32(Console.ReadLine());
+            switch (choice)
+            {
+                case 1:
+                    players.Add(Peso);
+                    break;
+                case 2:
+                    players.Add(Charlie);
+                    break;
+                case 3:
+                    players.Add(Richie);
+                    break;
+                case 4:
+                    players.Add(Beary);
+                    break;
+                case 5:
+                    players.Add(Piggy);
+                    break;
+            }
+        }
+
+
+
+        Combat combat = new Combat(players, new List<Character> {goblin, orc, shaman});
         
         combat.Start();
     }

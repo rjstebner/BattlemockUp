@@ -25,7 +25,7 @@ public class SheildBlock : Skill
     public SheildBlock()
     {
         Name = "Sheild Block";
-        Description = "Start Each Combat with a Bolstered.";
+        Description = "Start Each Turn with a Bolstered.";
         Cost = 0;
 
     }
@@ -72,7 +72,7 @@ public class SurpriseAttack : Skill
     public SurpriseAttack()
     {
         Name = "Surprise Attack";
-        Description = "A Strike that avoids armor.";
+        Description = "Start Combat with a Steal Stirke.";
         Cost = 0;
     }
 
@@ -107,9 +107,12 @@ public class BeconOfHealth : Skill
     }
 
     public override void Execute(Character user, Character target)
-    {
-        user.CurrentVigor += user.CurrVigorMax / 10;
-        Console.WriteLine(user.Name + " has healed for " + user.CurrVigorMax / 10 + " health.");
+    {       
+        if (user.CurrentVigor < user.CurrVigorMax)
+        {
+            user.CurrentVigor += Math.Max(user.CurrVigorMax / 10, 1);
+            Console.WriteLine(user.Name + " has healed for " + user.CurrVigorMax / 10 + " health.");
+        }
     }
 }
 
@@ -137,7 +140,7 @@ public class Strike : Skill
     public Strike()
     {
         Name = "Strike";
-        Description = "A basic attack that deals damage to enemies.";
+        Description = "A basic attack that deals damage equal to current vigor, is reduced by armor.";
         Type = "Physical";
         Cost = 0;
     }
@@ -156,7 +159,7 @@ public class StealthStrike : Skill
     public StealthStrike()
     {
         Name = "Stealth Strike";
-        Description = "A basic attack that pierces all armor.";
+        Description = "A basic attack that deals damage equal to Current vigor, ignores armor.";
         Type = "Physical";
         Cost = 0;
     }
@@ -220,7 +223,7 @@ public class Heal : Skill
     public Heal()
     {
         Name = "Heal";
-        Description = "Heal an Ally.";
+        Description = "Heal an Ally equal to your Tech.";
         Cost = 1;
     }
 
@@ -235,7 +238,7 @@ public class Energybolt : Skill
     public Energybolt()
     {
         Name = "Energybolt";
-        Description = "Deal damage to an enemy.";
+        Description = "Deal damage equal to your Tech to an enemy, is reduced by resistance.";
         Type = "Magical";
         Cost = 1;
     }

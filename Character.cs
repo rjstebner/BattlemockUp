@@ -111,7 +111,7 @@ public class Character
     }
     public void UseSkill(string skillName, Character target)
     {
-        List<string> selfPhysicalEffects = new List<string> { "Blind", "Honed", "Empowered" };
+        List<string> selfPhysicalEffects = new List<string> { "Blind", "Honed", "Empowered", "Hidden" };
         List<string> targetPhysicalEffects = new List<string> { "Brittle", "Barrier", "Bolstered" };
         List<string> selfMagicalEffects = new List<string> { "Empowered" };
         List<string> targetMagicalEffects = new List<string> { "Bolstered" };
@@ -160,6 +160,10 @@ public class Character
                     target.RecieveDamage = 1;
                 }
                 target.CurrentVigor -= target.RecieveDamage;
+                if (target.CurrentVigor < 0)
+                {
+                    target.CurrentVigor = 0;
+                }
                 
                 // reset damage calculations
                 DealtDamage = 0;
@@ -218,6 +222,10 @@ public class Character
                     target.RecieveDamage = 1;
                 }
                 target.CurrentVigor -= target.RecieveDamage;
+                if (target.CurrentVigor < 0)
+                {
+                    target.CurrentVigor = 0;
+                }
 
                 // reset damage calculations
                 DealtDamage = 0;
